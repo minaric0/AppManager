@@ -3,9 +3,12 @@ package io.github.muntashirakon.AppManager.utils;
 
 import static org.junit.Assert.*;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.robolectric.RobolectricTestRunner;
 import io.github.muntashirakon.AppManager.actions.ActionKind;
 import io.github.muntashirakon.AppManager.actions.ActionParameters;
 
+@RunWith(RobolectricTestRunner.class)
 public class SamsungA17TuningTest {
     @Test public void matchesExactTarget() {
         assertTrue(SamsungA17Tuning.isTargetDevice("samsung", "SM-A175N", 37));
