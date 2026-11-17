@@ -24,7 +24,7 @@ public class MultithreadedExecutor implements ExecutorService {
 
     @AnyThread
     @NonNull
-    public static MultithreadedExecutor getNewInstance() {
+    public static synchronized MultithreadedExecutor getNewInstance() {
         if (sExecutorCache.size() > 0) {
             // Check if any executor has been shutdown
             for (MultithreadedExecutor executor : sExecutorCache) {
@@ -137,8 +137,8 @@ public class MultithreadedExecutor implements ExecutorService {
     public static int getThreadCount() {
         int configuredCount = AppPref.getInt(AppPref.PrefKey.PREF_CONCURRENCY_THREAD_COUNT_INT);
         int totalCores = Utils.getTotalCores();
-        if (configuredCount <= 0 || configuredCount > totalCores) return totalCores;
-        return configuredCount;
+        return SamsungA17Tuning.recommendedThreadCount(configuredCount, totalCores,
+                SamsungA17Tuning.isTargetDevice());
     }
 
     /**

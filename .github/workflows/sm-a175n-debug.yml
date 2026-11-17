@@ -1,0 +1,32 @@
+name: SM-A175N debug APK
+on:
+  pull_request:
+    branches:
+      - master
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout submodules
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: zulu
+          java-version: '21'
+          cache: gradle
+      - name: Test
+        run: ./gradlew :app:testDebugUnitTest --no-daemon
+      - name: Build APK
+        run: ./gradlew packageDebugUniversalApk --no-daemon
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: appmanager-sm-a175n-android17-debug
+          path: app/build/outputs/**/*.apk
+          if-no-files-found: error

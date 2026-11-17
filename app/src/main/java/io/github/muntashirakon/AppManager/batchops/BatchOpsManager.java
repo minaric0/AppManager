@@ -76,6 +76,7 @@ import io.github.muntashirakon.AppManager.utils.ExUtils;
 import io.github.muntashirakon.AppManager.utils.FreezeUtils;
 import io.github.muntashirakon.AppManager.utils.MultithreadedExecutor;
 import io.github.muntashirakon.AppManager.utils.PackageUtils;
+import io.github.muntashirakon.AppManager.utils.SamsungA17Tuning;
 import io.github.muntashirakon.AppManager.utils.ThreadUtils;
 import io.github.muntashirakon.io.Path;
 import io.github.muntashirakon.io.Paths;
@@ -492,6 +493,11 @@ public class BatchOpsManager {
         for (int i = 0; i < max; ++i) {
             updateProgress(lastProgress, i + 1);
             pair = info.getPair(i);
+            if (SamsungA17Tuning.shouldProtect(pair)) {
+                log("====> op=BLOCK_COMPONENTS, SM-A175N safety guard skipped " + pair);
+                failedPackages.add(pair);
+                continue;
+            }
             try {
                 ComponentUtils.blockFilteredComponents(pair, options.getSignatures());
             } catch (Exception e) {
@@ -511,6 +517,11 @@ public class BatchOpsManager {
         for (int i = 0; i < max; ++i) {
             updateProgress(lastProgress, i + 1);
             pair = info.getPair(i);
+            if (SamsungA17Tuning.shouldProtect(pair)) {
+                log("====> op=BLOCK_TRACKERS, SM-A175N safety guard skipped " + pair);
+                failedPackages.add(pair);
+                continue;
+            }
             try {
                 ComponentUtils.blockTrackingComponents(pair);
             } catch (Exception e) {
@@ -569,6 +580,11 @@ public class BatchOpsManager {
         for (int i = 0; i < max; ++i) {
             updateProgress(lastProgress, i + 1);
             pair = info.getPair(i);
+            if (SamsungA17Tuning.shouldProtect(pair)) {
+                log("====> op=CLEAR_DATA, SM-A175N safety guard skipped " + pair);
+                failedPackages.add(pair);
+                continue;
+            }
             try {
                 PackageManagerCompat.clearApplicationUserData(pair);
             } catch (Exception e) {
@@ -589,6 +605,11 @@ public class BatchOpsManager {
         for (int i = 0; i < max; ++i) {
             updateProgress(lastProgress, i + 1);
             pair = info.getPair(i);
+            if (SamsungA17Tuning.shouldProtect(pair)) {
+                log("====> op=ADVANCED_FREEZE, SM-A175N safety guard skipped " + pair);
+                failedPackages.add(pair);
+                continue;
+            }
             int type;
             if (options.isPreferPerApp()) {
                 type = Optional.ofNullable(FreezeUtils.loadFreezeMethod(pair.getPackageName()))
@@ -613,6 +634,11 @@ public class BatchOpsManager {
         for (int i = 0; i < max; ++i) {
             updateProgress(lastProgress, i + 1);
             pair = info.getPair(i);
+            if (freeze && SamsungA17Tuning.shouldProtect(pair)) {
+                log("====> op=FREEZE, SM-A175N safety guard skipped " + pair);
+                failedPackages.add(pair);
+                continue;
+            }
             try {
                 if (freeze) {
                     FreezeUtils.freeze(pair.getPackageName(), pair.getUserId());
@@ -874,6 +900,11 @@ public class BatchOpsManager {
         for (int i = 0; i < max; ++i) {
             updateProgress(lastProgress, i + 1);
             pair = info.getPair(i);
+            if (SamsungA17Tuning.shouldProtect(pair)) {
+                log("====> op=UNINSTALL, SM-A175N safety guard skipped " + pair);
+                failedPackages.add(pair);
+                continue;
+            }
             PackageInstallerCompat installer = PackageInstallerCompat.getNewInstance();
             if (!installer.uninstall(pair.getPackageName(), pair.getUserId(), false)) {
                 log("====> op=UNINSTALL, pkg=" + pair);

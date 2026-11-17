@@ -4,6 +4,7 @@ package io.github.muntashirakon.AppManager.settings;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,8 @@ import androidx.lifecycle.ViewModelProvider;
 
 import io.github.muntashirakon.AppManager.R;
 import io.github.muntashirakon.AppManager.misc.DeviceInfo2;
+import io.github.muntashirakon.AppManager.utils.SamsungA17Tuning;
+import io.github.muntashirakon.AppManager.utils.MultithreadedExecutor;
 import io.github.muntashirakon.util.UiUtils;
 
 public class AboutDeviceFragment extends Fragment {
@@ -64,8 +67,16 @@ public class AboutDeviceFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         mTextView = view.findViewById(android.R.id.content);
         view.findViewById(android.R.id.checkbox).setVisibility(View.GONE);
-        mModel.getDeviceInfo().observe(getViewLifecycleOwner(), deviceInfo ->
-                mTextView.setText(deviceInfo.toLocalizedString(requireActivity())));
+        mModel.getDeviceInfo().observe(getViewLifecycleOwner(), deviceInfo -> {
+            CharSequence info = deviceInfo.toLocalizedString(requireActivity());
+            if (SamsungA17Tuning.isTargetDevice()) {
+                String guardStatus = getString(SamsungA17Tuning.isSafetyEnabled(requireContext())
+                        ? R.string.samsung_a17_guard_on : R.string.samsung_a17_guard_off);
+                info = TextUtils.concat(info, "\n\n", getString(R.string.samsung_a17_device_status,
+                        MultithreadedExecutor.getThreadCount(), guardStatus));
+            }
+            mTextView.setText(info);
+        });
         mModel.loadDeviceInfo(new DeviceInfo2(requireActivity()));
     }
 }
