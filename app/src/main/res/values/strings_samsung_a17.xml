@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="samsung_a17_safety_title">SM-A175N: protect core system packages</string>
+    <string name="samsung_a17_safety_summary">Prevent destructive batch/routine changes to critical packages or privileged shared UIDs. Turn off only if you can restore firmware.</string>
+    <string name="samsung_a17_guard_on">enabled</string>
+    <string name="samsung_a17_guard_off">disabled</string>
+    <string name="samsung_a17_guarded_package">SM-A175N protected</string>
+    <string name="samsung_a17_device_status">SM-A175N Android 17+ profile active\nWorker threads: %1$d\nSystem package guard: %2$s\nOne UI version requires separate verification.</string>
+</resources>

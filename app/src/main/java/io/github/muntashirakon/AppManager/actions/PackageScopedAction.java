@@ -13,6 +13,7 @@ import java.util.List;
 import io.github.muntashirakon.AppManager.types.UserPackagePair;
 import io.github.muntashirakon.AppManager.utils.ContextUtils;
 import io.github.muntashirakon.AppManager.utils.PackageUtils;
+import io.github.muntashirakon.AppManager.utils.SamsungA17Tuning;
 import io.github.muntashirakon.AppManager.R;
 
 /**
@@ -126,9 +127,16 @@ public abstract class PackageScopedAction extends Action {
                 ActionResult result;
                 ActionState currentState = null;
                 try {
-                    ActionState onState = getOnState(target);
-                    ActionState offState = getOffState(target);
-                    if (mode == ActionMode.OFF && getOffParameters() == null) {
+                    ActionParameters requested = mode == ActionMode.ON
+                            ? getOnParameters() : getOffParameters();
+                    boolean guarded = SamsungA17Tuning.isGuardedMutation(getKind(), requested)
+                            && SamsungA17Tuning.shouldProtect(target);
+                    ActionState onState = guarded ? null : getOnState(target);
+                    ActionState offState = guarded ? null : getOffState(target);
+                    if (guarded) {
+                        result = actionResult(target, ActionResultStatus.UNSUPPORTED,
+                                SamsungA17Tuning.BLOCK_MESSAGE);
+                    } else if (mode == ActionMode.OFF && getOffParameters() == null) {
                         result = actionResult(target, ActionResultStatus.UNSUPPORTED,
                                 "Action has no reverse operation");
                     } else if (onState == null && offState == null) {

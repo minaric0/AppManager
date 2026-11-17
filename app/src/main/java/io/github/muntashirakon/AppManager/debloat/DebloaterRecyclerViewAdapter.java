@@ -33,6 +33,7 @@ import java.util.Objects;
 
 import io.github.muntashirakon.AppManager.R;
 import io.github.muntashirakon.AppManager.utils.UIUtils;
+import io.github.muntashirakon.AppManager.utils.SamsungA17Tuning;
 import io.github.muntashirakon.AppManager.utils.appearance.ColorCodes;
 import io.github.muntashirakon.util.AccessibilityUtils;
 import io.github.muntashirakon.util.AdapterUtils;
@@ -162,6 +163,10 @@ public class DebloaterRecyclerViewAdapter extends MultiSelectionView.Adapter<Deb
         sb.append(getColoredText(context.getString(removalRes), removalColor));
         if (!TextUtils.isEmpty(warning)) {
             sb.append(" — ").append(warning);
+        }
+        if (SamsungA17Tuning.isTargetDevice() && SamsungA17Tuning.isSafetyEnabled(context)
+                && SamsungA17Tuning.isCriticalPackageName(debloatObject.packageName)) {
+            sb.append(" — ").append(context.getString(R.string.samsung_a17_guarded_package));
         }
         holder.iconView.setImageDrawable(icon);
         holder.listTypeView.setText(debloatObject.type);

@@ -34,6 +34,7 @@ import io.github.muntashirakon.AppManager.settings.crypto.ImportExportKeyStoreDi
 import io.github.muntashirakon.AppManager.utils.AppPref;
 import io.github.muntashirakon.AppManager.utils.ArrayUtils;
 import io.github.muntashirakon.AppManager.utils.MultithreadedExecutor;
+import io.github.muntashirakon.AppManager.utils.SamsungA17Tuning;
 import io.github.muntashirakon.AppManager.utils.Utils;
 import io.github.muntashirakon.dialog.SearchableMultiChoiceDialogBuilder;
 import io.github.muntashirakon.dialog.TextInputDialogBuilder;
@@ -58,6 +59,13 @@ public class AdvancedPreferences extends PreferenceFragment {
         setPreferencesFromResource(R.xml.preferences_advanced, rootKey);
         getPreferenceManager().setPreferenceDataStore(new SettingsDataStore());
         mModel = new ViewModelProvider(requireActivity()).get(MainPreferencesViewModel.class);
+        SwitchPreferenceCompat safety = Objects.requireNonNull(findPreference("samsung_a17_safety"));
+        safety.setVisible(SamsungA17Tuning.isTargetDevice());
+        safety.setChecked(SamsungA17Tuning.isSafetyEnabled(requireContext()));
+        safety.setOnPreferenceChangeListener((preference, value) -> {
+            SamsungA17Tuning.setSafetyEnabled(requireContext(), (Boolean) value);
+            return true;
+        });
         // Selected users
         Preference usersPref = Objects.requireNonNull(findPreference("selected_users"));
         usersPref.setOnPreferenceClickListener(preference -> {

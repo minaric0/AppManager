@@ -15,6 +15,12 @@
             app:summary="@string/pref_saved_apk_name_format_msg"
             app:title="@string/pref_saved_apk_name_format" />
 
+        <SwitchPreferenceCompat
+            app:iconSpaceReserved="false"
+            app:key="samsung_a17_safety"
+            app:title="@string/samsung_a17_safety_title"
+            app:summary="@string/samsung_a17_safety_summary" />
+
         <Preference
             app:iconSpaceReserved="false"
             app:key="thread_count"
