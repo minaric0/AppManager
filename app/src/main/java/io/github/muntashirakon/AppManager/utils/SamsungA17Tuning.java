@@ -74,6 +74,7 @@ public final class SamsungA17Tuning {
     /** Re-evaluate just before execution, including queued operations. */
     public static boolean shouldProtect(@NonNull UserPackagePair pair) {
         if (!isTargetDevice() || !isSafetyEnabled(ContextUtils.getContext())) return false;
+        if (isCriticalPackageName(pair.getPackageName())) return true;
         int uid;
         try {
             uid = PackageUtils.getAppUid(pair);

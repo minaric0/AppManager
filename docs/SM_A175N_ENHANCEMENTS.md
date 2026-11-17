@@ -29,8 +29,9 @@ git checkout feature/sm-a175n-oneui9-android17
 ./gradlew packageDebugUniversalApk
 ```
 
-For a downloadable debug APK, manually run **SM-A175N debug APK** in GitHub
-Actions on this branch and retrieve the artifact. Debug uses the upstream
+For a downloadable debug APK, use the **SM-A175N debug APK** GitHub Actions
+artifact generated on the pull request, or run the workflow manually after
+it is present on the default branch. Debug uses the upstream
 development signing key, not a secure release signing identity.
 
 Device testing is required for package operations, shell/ADB reconnection,
